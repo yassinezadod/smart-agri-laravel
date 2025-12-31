@@ -1,0 +1,37 @@
+services:
+  # L'application Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: yield-ai-app
+    restart: unless-stopped
+    working_dir: /var/www
+    # --- AJOUTE CES DEUX LIGNES ICI ---
+    ports:
+      - "8000:8000"
+    # ----------------------------------
+    volumes:
+      - .:/var/www
+    networks:
+      - yield-network
+
+  # La base de données
+  db:
+    image: mysql:8.0
+    container_name: yield-ai-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: yield_ai
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - yield-network
+
+networks:
+  yield-network:
+    driver: bridge
+
+volumes:
+  dbdata:

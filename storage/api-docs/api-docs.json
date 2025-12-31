@@ -1,0 +1,666 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Yield AI API Documentation",
+        "description": "Documentation de l'API de prédiction de rendement agricole",
+        "contact": {
+            "email": "admin@yield.ai"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8001",
+            "description": "Serveur de développement local"
+        }
+    ],
+    "paths": {
+        "/api/admin/users": {
+            "get": {
+                "tags": [
+                    "Administration"
+                ],
+                "summary": "Liste de tous les utilisateurs (Admin uniquement)",
+                "operationId": "bcbc999ba873aae4c974973b0005c295",
+                "responses": {
+                    "200": {
+                        "description": "Liste récupérée avec succès"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Inscription d'un nouvel utilisateur",
+                "operationId": "8e4e3cb7b46126f4696379d3c7eeb4ad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "agriculteur1442@yield.ai"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password64123"
+                                    },
+                                    "firstname": {
+                                        "type": "string",
+                                        "example": "Karima"
+                                    },
+                                    "lastname": {
+                                        "type": "string",
+                                        "example": "Faridi"
+                                    },
+                                    "ville": {
+                                        "type": "string",
+                                        "example": "Taroudant"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "06123454678"
+                                    },
+                                    "adresse": {
+                                        "type": "string",
+                                        "example": "Quartier Industriel"
+                                    },
+                                    "bio": {
+                                        "type": "string",
+                                        "example": "Producteur d'agrumes."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Utilisateur enregistré, email envoyé"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                }
+            }
+        },
+        "/api/verify-email/{id}": {
+            "get": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Activer le compte utilisateur",
+                "description": "Active le compte de l'utilisateur en passant son UUID",
+                "operationId": "43b95ae453588ef587d63f73b4335e31",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "UUID de l'utilisateur à vérifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "9ade3652-f99a-4c28-9f66-1c290130965c"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Compte activé"
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Authentification de l'utilisateur",
+                "description": "Permet à un agriculteur de se connecter pour obtenir un token",
+                "operationId": "222b2625838e3c57e017987f73598fda",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "agriculteur1442@yield.ai"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password64123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "Bearer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Identifiants invalides"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Déconnexion de l'utilisateur",
+                "description": "Révoque le token d'accès actuel de l'utilisateur",
+                "operationId": "ad65cbbd4e9f201619eae184a5961a98",
+                "responses": {
+                    "200": {
+                        "description": "Déconnexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Déconnecté avec succès"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié (Token invalide ou manquant)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/forgot-password": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Demander un code de récupération de mot de passe",
+                "operationId": "20d78161b19ac6afb56924e74974ec46",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "agriculteur1442@yield.ai"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Code envoyé"
+                    },
+                    "404": {
+                        "description": "Email non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/reset-password": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Réinitialiser le mot de passe avec le code",
+                "operationId": "0a6624b616e4ba5a310a61d9f7418c35",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "code",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mot de passe réinitialisé"
+                    },
+                    "422": {
+                        "description": "Code invalide ou expiré"
+                    }
+                }
+            }
+        },
+        "/api/users/me": {
+            "get": {
+                "tags": [
+                    "Profil"
+                ],
+                "summary": "Obtenir les informations du profil connecté",
+                "operationId": "76f6b85960e15580a0389fc19e3e8ffd",
+                "responses": {
+                    "200": {
+                        "description": "Détails du profil"
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Profil"
+                ],
+                "summary": "Désactiver mon compte (Soft Delete)",
+                "operationId": "8f3431d8e8522f79c96072a4d5ab27dc",
+                "responses": {
+                    "200": {
+                        "description": "Compte désactivé"
+                    },
+                    "401": {
+                        "description": "Non autorisé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Profil"
+                ],
+                "summary": "Mettre à jour mon profil",
+                "operationId": "a14e8c73a66e59b7d042a9e9af521da2",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "firstname": {
+                                        "type": "string",
+                                        "example": "Karima"
+                                    },
+                                    "ville": {
+                                        "type": "string",
+                                        "example": "Agadir"
+                                    },
+                                    "bio": {
+                                        "type": "string",
+                                        "example": "Bio mise à jour."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profil mis à jour"
+                    },
+                    "422": {
+                        "description": "Erreur de validation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/predict-yield": {
+            "post": {
+                "tags": [
+                    "Predictions"
+                ],
+                "summary": "Lancer une prédiction de rendement",
+                "operationId": "1e7e7f9c61477ce50a5cc4c96e6e754c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "variete",
+                                    "current_week_data"
+                                ],
+                                "properties": {
+                                    "variete": {
+                                        "type": "string",
+                                        "example": "Variété A"
+                                    },
+                                    "current_week_data": {
+                                        "description": "Données climatiques de la semaine",
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Prédiction réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "result": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur service IA"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/predictions": {
+            "get": {
+                "tags": [
+                    "Predictions"
+                ],
+                "summary": "Récupérer l'historique des prédictions",
+                "operationId": "a43ff4953f3057eaa399ec5be9eefdf3",
+                "responses": {
+                    "200": {
+                        "description": "Liste des prédictions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "history": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/yield/compare": {
+            "post": {
+                "tags": [
+                    "Analyse de Rendement"
+                ],
+                "summary": "Comparer prévisions IA et données réelles",
+                "description": "Envoie les données réelles au service Python, calcule les métriques (MAE, RMSE) et enregistre le résultat.",
+                "operationId": "0feba9f9cc9443af5d0966a34f59da80",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "prediction_id",
+                                    "valeurs_reelles"
+                                ],
+                                "properties": {
+                                    "prediction_id": {
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "019b6fe7-f207-73c5-b5bc-8fc776729eb5"
+                                    },
+                                    "valeurs_reelles": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "semaine": {
+                                                    "type": "integer",
+                                                    "example": 49
+                                                },
+                                                "valeur_reelle": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 7.9
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Analyse enregistrée ou mise à jour avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Analyse enregistrée avec succès"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Données invalides ou aucune correspondance trouvée"
+                    },
+                    "500": {
+                        "description": "Erreur interne ou service IA indisponible"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/yield/comparisons": {
+            "get": {
+                "tags": [
+                    "Analyse de Rendement"
+                ],
+                "summary": "Lister les analyses de l'utilisateur",
+                "description": "Récupère toutes les comparaisons de rendement liées aux prédictions de l'utilisateur connecté.",
+                "operationId": "495bdaa6b97be51b2f38b7d59182162e",
+                "responses": {
+                    "200": {
+                        "description": "Liste des analyses récupérée avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Entrez votre token d'accès (access_token) reçu lors de la connexion pour accéder aux routes protégées.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Predictions",
+            "description": "Gestion des prédictions de rendement"
+        },
+        {
+            "name": "Analyse de Rendement",
+            "description": "Gestion des comparaisons entre les prévisions IA et les rendements réels"
+        },
+        {
+            "name": "Administration",
+            "description": "Administration"
+        },
+        {
+            "name": "Authentification",
+            "description": "Authentification"
+        },
+        {
+            "name": "Profil",
+            "description": "Profil"
+        }
+    ]
+}

@@ -101,6 +101,75 @@ php artisan serve --port=8001
 
 ---
 
+## 📖 Documentation des API (Swagger)
+
+Chaque service possède sa propre documentation interactive pour tester les endpoints :
+
+### 🤖 Microservice IA (FastAPI)
+
+La documentation Swagger est générée automatiquement et permet de tester les prédictions :
+
+-   **URL**: http://localhost:8000/docs
+-   **Alternative (Redoc)**: http://localhost:8000/redoc
+
+### 🌐 Web App (Laravel)
+
+Pour Laravel, nous utilisons **L5-Swagger** (OpenAPI).
+
+-   **URL**: http://localhost:8001/api/documentation
+-   **Génération manuelle**: Si vous ajoutez de nouvelles routes, relancez la doc avec :
+
+```bash
+docker exec yield-ai-app php artisan l5-swagger:generate
+```
+
+## 🐳 Architecture Docker & Infrastructure
+
+Le projet utilise une architecture en microservices conteneurisés pour garantir l'isolation et la portabilité.
+
+### Détails des conteneurs :
+
+-   **yield-ai-app** : Serveur Laravel 10 (PHP 8.2-FPM).
+-   **yield-ai-db** : Base de données MySQL pour l'authentification et les métadonnées.
+-   **yield-ai-service** : Microservice Python FastAPI pour les calculs IA.
+-   **yield-ai-mongo** : Base de données NoSQL pour l'historique massif des données climatiques.
+
+### 🚀 Commandes de lancement
+
+1. **Lancer le moteur IA et MongoDB**
+
+```bash
+cd ../yield_ai_service
+docker-compose up -d
+```
+
+2. **Lancer l'interface Web et MySQL**
+
+```bash
+cd ../yield-ai-web
+docker-compose up -d
+```
+
+### 🛠️ Maintenance & Utilitaires
+
+1. **Arrêter tous les services** :
+
+```bash
+ docker-compose down
+```
+
+2. **Voir les logs en temps réel** :
+
+```bash
+docker logs -f yield-ai-app
+```
+
+3. **Accès SQL interne** :
+
+```bash
+docker exec -it yield-ai-db mysql -u root -p
+```
+
 ## 🚀 Fonctionnalités à venir
 
 -   [ ] Tableaux de bord graphiques avec Chart.js.

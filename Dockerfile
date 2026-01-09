@@ -28,4 +28,4 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # Exposition du port
 EXPOSE 80
 
-CMD ["php-fpm"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

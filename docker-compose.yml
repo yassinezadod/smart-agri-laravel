@@ -7,16 +7,19 @@ services:
     container_name: yield-ai-app
     restart: unless-stopped
     working_dir: /var/www
-    # --- AJOUTE CES DEUX LIGNES ICI ---
     ports:
-      - "8000:8000"
-    # ----------------------------------
+      - "8001:8000"
     volumes:
       - .:/var/www
+    # --- LA LIGNE INDISPENSABLE EST ICI ---
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    # --------------------------------------
     networks:
       - yield-network
+    depends_on:
+      - db
 
-  # La base de données
+  # La base de données MySQL
   db:
     image: mysql:8.0
     container_name: yield-ai-db

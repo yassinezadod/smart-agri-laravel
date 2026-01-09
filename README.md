@@ -129,7 +129,7 @@ Le projet utilise une architecture en microservices conteneurisés pour garantir
 
 ### 🏗️ Architecture du Système
 
-![Architecture de Smart Agri](./docs/architecture docker.png)
+![Architecture de Smart Agri](./public/architecture docker.png)
 
 _Légende : Nginx (Vert), Laravel (Rose), MySQL (Orange/Bleu), FastAPI (Teal), MongoDB (Vert/Pointillés)._
 

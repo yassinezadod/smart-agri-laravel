@@ -127,6 +127,12 @@ docker exec yield-ai-app php artisan l5-swagger:generate
 
 Le projet utilise une architecture en microservices conteneurisés pour garantir l'isolation et la portabilité.
 
+### 🏗️ Architecture du Système
+
+![Architecture de Smart Agri](./docs/architecture docker.png)
+
+_Légende : Nginx (Vert), Laravel (Rose), MySQL (Orange/Bleu), FastAPI (Teal), MongoDB (Vert/Pointillés)._
+
 ### Détails des conteneurs :
 
 -   **yield-ai-app** : Serveur Laravel 10 (PHP 8.2-FPM).

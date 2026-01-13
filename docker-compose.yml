@@ -11,11 +11,10 @@ services:
       - "8001:8000"
     volumes:
       - .:/var/www
-    # --- LA LIGNE INDISPENSABLE EST ICI ---
     command: php artisan serve --host=0.0.0.0 --port=8000
-    # --------------------------------------
     networks:
       - yield-network
+      - python-network # <--- Ajout du réseau IA ici
     depends_on:
       - db
 
@@ -35,6 +34,10 @@ services:
 networks:
   yield-network:
     driver: bridge
+  # Connexion au réseau existant du serveur Python
+  python-network:
+    external: true
+    name: yield_ai_service_yield_bridge # <--- Ton nom de réseau trouvé via docker network ls
 
 volumes:
   dbdata:
